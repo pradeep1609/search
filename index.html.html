@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Word Finder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      padding: 20px;
+      gap: 20px;
+      background-color: #f0f0f0;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      gap: 20px;
+    }
+
+    textarea, input {
+      width: 100%;
+      font-size: 16px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: vertical;
+    }
+
+    .box {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .highlighted {
+      background-color: yellow;
+      font-weight: bold;
+    }
+
+    #output {
+      white-space: pre-wrap;
+      padding: 10px;
+      border-radius: 8px;
+      background: white;
+      min-height: 100px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Paragraph input -->
+    <div class="box">
+      <label for="paragraph">Enter Paragraph:</label>
+      <textarea id="paragraph" rows="10"></textarea>
+    </div>
+
+    <!-- Word list input -->
+    <div class="box">
+      <label for="words">Enter words to find (comma separated):</label>
+      <input type="text" id="words" placeholder="e.g., apple, banana, orange">
+      <button onclick="highlightWords()">Search</button>
+      <div id="output"></div>
+    </div>
+  </div>
+
+  <script>
+    function highlightWords() {
+      const paragraph = document.getElementById("paragraph").value;
+      const wordList = document.getElementById("words").value
+        .split(',')
+        .map(word => word.trim())
+        .filter(word => word !== "");
+
+      if (wordList.length === 0) {
+        document.getElementById("output").innerText = paragraph;
+        return;
+      }
+
+      let highlighted = paragraph;
+      wordList.forEach(word => {
+        const regex = new RegExp(`\\b(${word})\\b`, 'gi');
+        highlighted = highlighted.replace(regex, '<span class="highlighted">$1</span>');
+      });
+
+      document.getElementById("output").innerHTML = highlighted;
+    }
+  </script>
+</body>
+</html>
